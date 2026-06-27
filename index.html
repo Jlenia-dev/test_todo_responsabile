@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test di usabilità</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f3f0e9;
+      --ink: #1c1f26;
+      --body: #33352f;
+      --gold: #c0a05a;
+      --primary: #005366;
+      --navy: #1d3a5e;
+      --muted: #6f6a5e;
+      --rule: #ddd8cc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--body);
+      font-family: "Jost", system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      justify-content: center;
+      padding: 7rem 1.5rem;
+    }
+    .sheet {
+      width: 100%;
+      max-width: 620px;
+    }
+    h1 {
+      font-family: "Jost", system-ui, sans-serif;
+      font-weight: 400;
+      font-size: clamp(2.4rem, 6vw, 3.4rem);
+      color: var(--ink);
+      letter-spacing: 0.5px;
+      margin: 0 0 2.8rem;
+    }
+    ol {
+      list-style: none;
+      counter-reset: step;
+      margin: 0;
+      padding: 0;
+    }
+    ol li {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 2.4rem 1fr;
+      gap: 0.6rem;
+      margin-bottom: 1.9rem;
+      font-size: 1.06rem;
+      line-height: 1.65;
+    }
+    ol li::before {
+      content: counter(step) ".";
+      font-family: "Jost", system-ui, sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    strong { color: var(--navy); font-weight: 600; }
+    hr {
+      border: 0;
+      border-top: 1px solid var(--rule);
+      margin: 2.6rem 0;
+    }
+    .note {
+      color: var(--ink);
+      font-weight: 600;
+      line-height: 1.6;
+      margin: 0 0 2.2rem;
+    }
+    .thanks {
+      color: var(--muted);
+      font-size: 0.97rem;
+      margin: 0 0 2.8rem;
+    }
+    .start {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--primary);
+      color: #fff;
+      border: 0;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.95rem 1.7rem;
+      border-radius: 999px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+    .start:hover { background: #00404f; }
+    .start:active { transform: translateY(1px); }
+    .start:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .start .arrow { transition: transform 0.2s ease; }
+    .start:hover .arrow { transform: translateX(3px); }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 999;
+    }
+    .overlay.show { display: block; }
+
+    .fallback {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      right: 5rem;
+      width: 320px;
+      max-width: calc(100vw - 2rem);
+      padding: 1.2rem 1.3rem;
+      background: #fbf9f4;
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      z-index: 1000;
+    }
+    .fallback.show { display: block; }
+    .fallback::before {
+      content: "";
+      position: absolute;
+      top: -9px;
+      left: 26px;
+      width: 16px;
+      height: 16px;
+      background: #fbf9f4;
+      border-top: 1px solid var(--rule);
+      border-left: 1px solid var(--rule);
+      transform: rotate(45deg);
+    }
+    .fallback p {
+      margin: 0;
+      line-height: 1.55;
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+    .fallback p strong { color: var(--primary); }
+    .fallback .fallback-title {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .fallback-btn {
+      margin-top: 1rem;
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+      border: 0;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 0.75rem 1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .fallback-btn:hover { background: #00404f; }
+    .fallback-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <main class="sheet">
+    <h1>Caro partecipante,</h1>
+
+    <ol>
+      <li><span>Ti sarà chiesto di compiere alcuni task su un'app bancaria. Durante ogni task, ti chiediamo di <strong>commentare ad alta voce</strong> tutti i passaggi che fai.</span></li>
+      <li><span>Al termine di ogni task, ti verrà chiesto di completare un breve questionario in merito all'esperienza appena vissuta.</span></li>
+      <li><span>Al termine dell'esperimento, seguirà un questionario finale.</span></li>
+    </ol>
+
+    <hr>
+
+    <p class="note">Non esistono risposte giuste o sbagliate — sentiti libero di rispondere come ti sembra più appropriato.</p>
+
+    <p class="thanks">🎁 Ti ringraziamo per la tua preziosa collaborazione.</p>
+
+    <button class="start" id="apri">
+      Inizia il test <span class="arrow">→</span>
+    </button>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="fallback" id="fallback">
+      <p class="fallback-title">Consenso popup necessario</p>
+      <p>Per consentire al browser di aprire le schede necessarie per l'esecuzione del test, clicca sull'icona di <strong>popup bloccato</strong> nella barra degli indirizzi e scegli "Consenti sempre". Poi premi il pulsante qui sotto.</p>
+      <button class="fallback-btn" id="riprova">Fatto - inizia il test</button>
+    </div>
+  </main>
+
+  <script>
+    const urls = [
+      "https://www.figma.com/proto/ssHZhFwVgIU9mTBDYeR4uS/OURBANK---Intranet--LOTTO-2----Playground-UX-UI?node-id=792-62548&starting-point-node-id=1658%3A57757",
+      "https://www.figma.com/proto/ssHZhFwVgIU9mTBDYeR4uS/OURBANK---Intranet--LOTTO-2----Playground-UX-UI?node-id=1975-76359&starting-point-node-id=1658%3A57757",
+      "https://www.figma.com/proto/ssHZhFwVgIU9mTBDYeR4uS/OURBANK---Intranet--LOTTO-2----Playground-UX-UI?node-id=1975-76359&starting-point-node-id=1658%3A57757",
+      "https://www.figma.com/proto/ssHZhFwVgIU9mTBDYeR4uS/OURBANK---Intranet--LOTTO-2----Playground-UX-UI?node-id=1975-76359&starting-point-node-id=1658%3A57757"
+    ];
+
+    const fallback = document.getElementById("fallback");
+    const overlay = document.getElementById("overlay");
+
+    let aperte = [];        // riferimenti alle schede aperte con successo
+    let inCorso = false;    // throttle: ignora i click ravvicinati
+
+    // Restituisce solo le schede del nostro gruppo ancora aperte
+    function schedeVive() {
+      aperte = aperte.filter(w => w && !w.closed);
+      return aperte;
+    }
+
+    function apriSchede() {
+      // Anti-spam: un solo tentativo alla volta, poi breve pausa
+      if (inCorso) return;
+      inCorso = true;
+      setTimeout(() => { inCorso = false; }, 500);
+
+      // Se le 4 schede sono già aperte, non riaprirle: niente nuove tab,
+      // porta solo la vista sull'ultima e chiudi riquadro e overlay.
+      if (schedeVive().length === urls.length) {
+        fallback.classList.remove("show");
+        overlay.classList.remove("show");
+        try { aperte[aperte.length - 1].focus(); } catch (e) {}
+        return;
+      }
+
+      // Chiudi eventuali schede rimaste da un tentativo parziale precedente
+      aperte.forEach(w => { try { w.close(); } catch (e) {} });
+      aperte = [];
+
+      const opened = [];
+      let blocked = false;
+
+      // Apre le 4 schede tenendone i riferimenti. Subito dopo l'apertura
+      // riporta il focus a questa pagina, così le prime restano "dietro".
+      for (const url of urls) {
+        const win = window.open(url, "_blank");
+        if (!win || win.closed || typeof win.closed === "undefined") {
+          blocked = true;
+        } else {
+          opened.push(win);
+          try { win.blur(); window.focus(); } catch (e) {}
+        }
+      }
+
+      if (blocked) {
+        // Tutto o niente: chiudi le schede aperte e resta sulle istruzioni,
+        // senza portare la vista su nessuna scheda. Mostra riquadro e overlay.
+        opened.forEach(win => { try { win.close(); } catch (e) {} });
+        aperte = [];
+        window.focus();
+        fallback.classList.add("show");
+        overlay.classList.add("show");
+      } else {
+        // Tutte e 4 aperte: memorizzale, chiudi riquadro e overlay,
+        // vista sull'ultima (la 4ª).
+        aperte = opened;
+        fallback.classList.remove("show");
+        overlay.classList.remove("show");
+        try { opened[opened.length - 1].focus(); } catch (e) {}
+      }
+    }
+
+    document.getElementById("apri").addEventListener("click", apriSchede);
+    document.getElementById("riprova").addEventListener("click", apriSchede);
+  </script>
+</body>
+</html>
